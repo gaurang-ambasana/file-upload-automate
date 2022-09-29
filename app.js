@@ -1,8 +1,11 @@
+import { config } from "dotenv";
 import { google } from "googleapis";
 import authCli from "./auth/auth.js";
 
+config();
+
 const corpora = `drive`;
-const driveId = `0AEkXI6AMJY0PUk9PVA`;
+const driveId = process.env.DRIVE_ID;
 const supportsAllDrives = true;
 const includeItemsFromAllDrives = true;
 
