@@ -1,14 +1,16 @@
 {
   "name": "file-upload-automation",
   "version": "1.0.0",
+  "type": "module",
   "description": "upload file from shared drive to google cloud storage",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "Gaurang Ambasana",
   "license": "ISC",
   "dependencies": {
+    "google-auth-library": "^8.5.2",
     "googleapis": "^108.0.0"
   }
 }
