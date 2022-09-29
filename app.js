@@ -1,24 +1,20 @@
-import { config } from "dotenv";
 import { google } from "googleapis";
+import authCli from "./auth/auth.js";
 
-config();
-
-const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, REFRESH_TOKEN } = process.env;
-
-const authCli = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-authCli.setCredentials({ refresh_token: REFRESH_TOKEN });
+const corpora = `drive`;
+const driveId = `0AEkXI6AMJY0PUk9PVA`;
+const supportsAllDrives = true;
+const includeItemsFromAllDrives = true;
 
 const googleDrive = google.drive({ version: "v3", auth: authCli });
 
 googleDrive.files.list(
-  {
-    corpora: "drive",
-    driveId: "0AEkXI6AMJY0PUk9PVA",
-    supportsAllDrives: true,
-    includeItemsFromAllDrives: true,
-  },
-  (err, { data }) => {
+  { corpora, driveId, supportsAllDrives, includeItemsFromAllDrives },
+  (err, res) => {
     if (err) console.error(err.stack);
-    else console.log(data.files);
+    else {
+      const { files } = res.data;
+      console.log(files);
+    }
   }
 );
