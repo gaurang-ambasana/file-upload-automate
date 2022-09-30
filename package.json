@@ -5,13 +5,19 @@
   "description": "upload file from shared drive to google cloud storage",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "server": "node ./file-upload/server.js",
+    "devServer": "nodemon ./file-upload/server.js"
   },
   "author": "Gaurang Ambasana",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^6.5.2",
+    "body-parser": "^1.20.0",
     "dotenv": "^16.0.3",
-    "google-auth-library": "^8.5.2",
-    "googleapis": "^108.0.0"
+    "express": "^4.18.1",
+    "googleapis": "^108.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.20"
   }
 }
