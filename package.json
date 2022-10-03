@@ -6,7 +6,9 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "devServer": "nodemon ./upload/index.js"
+    "devServer": "nodemon ./upload/index.js",
+    "server": "node ./upload/index.js",
+    "upload": "concurrently \"npm run server\" \"npm start\""
   },
   "author": "Gaurang Ambasana",
   "license": "ISC",
@@ -19,6 +21,7 @@
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
+    "concurrently": "^7.4.0",
     "nodemon": "^2.0.20"
   }
 }
