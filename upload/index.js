@@ -23,9 +23,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post("/uploads", async ({ file, body: { name, mimeType } }, res, next) => {
   try {
-    const fileUrl = await uploadCsv(file, name, mimeType);
+    const { publicUrl, msg } = await uploadCsv(file, name, mimeType);
     res.status(200).json({
-      msg: "Success!",
+      msg,
+      publicUrl,
     });
   } catch (e) {
     console.error(e);
