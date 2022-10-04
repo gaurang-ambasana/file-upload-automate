@@ -1,7 +1,6 @@
 import { config } from "dotenv";
 import { google } from "googleapis";
 import authCli from "./auth/auth.js";
-import { createReadStream } from "fs";
 
 config();
 
@@ -34,30 +33,29 @@ do {
   );
 } while (pageToken);
 
-for (let i = 0, n = allCsv.length; i < n; i++) {
-  const { id, mimeType, name } = allCsv[i];
+allCsv.forEach(async ({ id: fileId, mimeType, name: fileName }) => {
+  try {
+    const { data } = await googleDrive.files.get({
+      fileId,
+      supportsAllDrives,
+      alt: "media",
+    });
 
-  const { data } = await googleDrive.files.get({
-    fileId: id,
-    supportsAllDrives,
-    alt: "media",
-  });
+    const blob = new Blob([data]);
 
-  const blob = new Blob([data]);
+    const formData = new FormData();
+    formData.append("file", blob);
+    formData.append("name", fileName);
+    formData.append("mimeType", mimeType);
 
-  const formData = new FormData();
-  formData.append("file", blob);
-  formData.append("name", name);
-  formData.append("mimeType", mimeType);
+    const { status, msg, publicUrl } = await fetch(process.env.UPLOAD_URL, {
+      method: "POST",
+      body: formData,
+    });
 
-  fetch("http://localhost:3000/uploads", {
-    method: "POST",
-    body: formData,
-  })
-    .then(({ status, msg }) =>
-      status === 200
-        ? console.log(`"${name}" uploaded successfully`)
-        : console.log(`"${name}" upload failed, ${msg}`)
-    )
-    .catch(console.error);
-}
+    if (status === 200) console.log(`"${fileName}" uploaded successfully`);
+    else console.error(`"${fileName}" upload failed, ${msg}`);
+  } catch (e) {
+    console.error(e);
+  }
+});
