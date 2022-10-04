@@ -17,10 +17,13 @@ export const uploadCsv = (file, name, mimeType) =>
     });
     blobStream
       .on("finish", () => {
-        //   const publicUrl = format(
-        //     `https://storage.googleapis.com/${csvBucket.name}/${blob.name}`
-        //   );
-        resolve("Upload Success!");
+        const publicUrl = format(
+          `https://storage.googleapis.com/${csvBucket.name}/${blob.name}`
+        );
+        resolve({
+          msg: "Upload Success!",
+          publicUrl,
+        });
       })
       .on("error", (err) => {
         console.error(err.message);
