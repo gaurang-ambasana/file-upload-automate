@@ -5,7 +5,8 @@
   "description": "upload file from shared drive to google cloud storage",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "devServer": "nodemon app.js"
   },
   "author": "Gaurang Ambasana",
   "license": "ISC",
@@ -18,7 +19,6 @@
     "googleapis": "^108.0.0"
   },
   "devDependencies": {
-    "concurrently": "^7.4.0",
     "nodemon": "^2.0.20"
   }
 }
