@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import { google } from "googleapis";
 import authCli from "../auth/auth.js";
 import storage from "../config/index.js";
+import { Readable } from "stream";
 
 config();
 
@@ -51,10 +52,8 @@ export const listCsv = async (driveId) => {
   }
 };
 
-export const uploadCsv = (file, name, mimeType) =>
+export const uploadCsv = (content, name, mimeType) =>
   new Promise((resolve, reject) => {
-    const { buffer } = file;
-
     const blob = csvBucket.file(name.replace(/ /g, "_"));
     const blobStream = blob.createWriteStream({
       resumable: false,
@@ -74,5 +73,5 @@ export const uploadCsv = (file, name, mimeType) =>
         console.error(err.message);
         reject({ msg: `Unable to upload, something went wrong` });
       })
-      .end(buffer);
+      .end(content);
   });
