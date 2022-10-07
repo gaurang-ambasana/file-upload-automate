@@ -25,9 +25,7 @@ app.get("/fetch-csv-and-upload", async ({ query: { driveId } }, res, next) => {
 
       const { data } = await getFileContent(fileId);
 
-      const file = await new Blob([data]).arrayBuffer();
-
-      const { msg, publicUrl } = await uploadCsv(file, fileName, mimeType);
+      const { msg, publicUrl } = await uploadCsv(data, fileName, mimeType);
 
       if (publicUrl) {
         console.log(`"${fileName}" uploaded successfully.`);
