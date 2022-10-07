@@ -1,10 +1,55 @@
 import { format } from "util";
 import { config } from "dotenv";
+import { google } from "googleapis";
+import authCli from "../auth/auth.js";
 import storage from "../config/index.js";
 
 config();
 
+const googleDrive = google.drive({ version: "v3", auth: authCli });
+const corpora = `drive`;
+const supportsAllDrives = true;
+const includeItemsFromAllDrives = true;
+
 const csvBucket = storage.bucket(process.env.BUCKET_NAME);
+
+export const getFileContent = async (fileId) =>
+  await googleDrive.files.get({
+    fileId,
+    supportsAllDrives,
+    alt: "media",
+  });
+
+export const listCsv = async (driveId) => {
+  try {
+    let pageToken;
+
+    const query = `mimeType: 'text/csv'`;
+
+    const allCsv = [];
+
+    do {
+      const {
+        data: { files },
+      } = await googleDrive.files.list({
+        corpora,
+        driveId,
+        supportsAllDrives,
+        includeItemsFromAllDrives,
+        q: query,
+        pageToken,
+      });
+      allCsv.push(
+        ...files.map(({ id, name, mimeType }) => ({ id, name, mimeType }))
+      );
+    } while (pageToken);
+
+    return allCsv;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
 
 export const uploadCsv = (file, name, mimeType) =>
   new Promise((resolve, reject) => {
@@ -27,7 +72,7 @@ export const uploadCsv = (file, name, mimeType) =>
       })
       .on("error", (err) => {
         console.error(err.message);
-        reject(`Unable to upload, something went wrong`);
+        reject({ msg: `Unable to upload, something went wrong` });
       })
       .end(buffer);
   });
