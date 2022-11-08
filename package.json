@@ -11,7 +11,6 @@
   "author": "Gaurang Ambasana",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/functions-framework": "^3.1.2",
     "@google-cloud/storage": "^6.5.2",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.3",
